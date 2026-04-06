@@ -13,12 +13,11 @@ const api = axios.create({
 // Add request interceptor for debugging
 api.interceptors.request.use(
   (config) => {
-    console.log(`🚀 API Request: ${config.method?.toUpperCase()} ${config.baseURL}${config.url}`);
-    console.log(`📋 Full URL: ${config.baseURL}${config.url}`);
+    console.log(`API Request: ${config.method?.toUpperCase()} ${config.url}`);
     return config;
   },
   (error) => {
-    console.error('❌ Request error:', error);
+    console.error('Request error:', error);
     return Promise.reject(error);
   }
 );
@@ -26,42 +25,39 @@ api.interceptors.request.use(
 // Add response interceptor for error handling
 api.interceptors.response.use(
   (response) => {
-    console.log(`✅ API Response: ${response.status} ${response.config.url}`);
-    console.log(`📦 Data:`, response.data);
+    console.log(`API Response: ${response.status} ${response.config.url}`);
     return response;
   },
   (error) => {
-    console.error('❌ Response error:', error);
-    console.error('🔗 Error URL:', error.config?.baseURL + error.config?.url);
-    console.error('📊 Status:', error.response?.status);
-    console.error('💬 Message:', error.message);
+    console.error('Response error:', error);
+    console.error('Error details:', {
+      message: error.message,
+      code: error.code,
+      status: error.response?.status,
+      statusText: error.response?.statusText,
+      data: error.response?.data,
+      config: {
+        url: error.config?.url,
+        method: error.config?.method,
+        baseURL: error.config?.baseURL
+      }
+    });
     
     if (error.code === 'ECONNABORTED') {
       error.message = 'Request timeout. Please try again.';
     } else if (error.response?.status === 0) {
       error.message = 'Network error. Please check your connection.';
     } else if (error.response?.status === 404) {
-      error.message = 'API endpoint not found. Please check backend deployment.';
+      error.message = 'Resource not found.';
     } else if (error.response?.status >= 500) {
       error.message = 'Server error. Please try again later.';
+    } else if (error.message === 'Network Error') {
+      error.message = 'CORS error or network issue. Check backend CORS settings.';
     }
     
     return Promise.reject(error);
   }
 );
-
-// API test function
-export const testAPI = async () => {
-  try {
-    console.log('🧪 Testing API connection...');
-    const response = await api.get('/');
-    console.log('✅ API test successful:', response.data);
-    return { success: true, data: response.data };
-  } catch (error) {
-    console.error('❌ API test failed:', error);
-    return { success: false, error: error.message };
-  }
-};
 
 // Customer API
 export const customerAPI = {
