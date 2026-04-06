@@ -1,7 +1,9 @@
 import axios from 'axios';
 
-const API_BASE_URL = 'https://logiedge-billing-dashboard-zqwe.onrender.com/';
+// ✅ Use ENV variable (BEST PRACTICE)
+const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
 
+// ✅ Create Axios Instance
 const api = axios.create({
   baseURL: API_BASE_URL,
   headers: {
@@ -9,33 +11,115 @@ const api = axios.create({
   },
 });
 
-// Customer API
+// ==============================
+// 🔹 CUSTOMER API
+// ==============================
 export const customerAPI = {
-  getAll: () => api.get('/customers'),
-  getById: (id) => api.get(`/customers/${id}`),
-  create: (data) => api.post('/customers', data),
-  update: (id, data) => api.put(`/customers/${id}`, data),
-  delete: (id) => api.delete(`/customers/${id}`),
+  getAll: async () => {
+    const res = await api.get('/customers');
+    return res.data;
+  },
+
+  getById: async (id) => {
+    const res = await api.get(`/customers/${id}`);
+    return res.data;
+  },
+
+  create: async (data) => {
+    const res = await api.post('/customers', data);
+    return res.data;
+  },
+
+  update: async (id, data) => {
+    const res = await api.put(`/customers/${id}`, data);
+    return res.data;
+  },
+
+  delete: async (id) => {
+    const res = await api.delete(`/customers/${id}`);
+    return res.data;
+  },
 };
 
-// Item API
+// ==============================
+// 🔹 ITEM API
+// ==============================
 export const itemAPI = {
-  getAll: () => api.get('/items'),
-  getById: (id) => api.get(`/items/${id}`),
-  create: (data) => api.post('/items', data),
-  update: (id, data) => api.put(`/items/${id}`, data),
-  delete: (id) => api.delete(`/items/${id}`),
+  getAll: async () => {
+    const res = await api.get('/items');
+    return res.data;
+  },
+
+  getById: async (id) => {
+    const res = await api.get(`/items/${id}`);
+    return res.data;
+  },
+
+  create: async (data) => {
+    const res = await api.post('/items', data);
+    return res.data;
+  },
+
+  update: async (id, data) => {
+    const res = await api.put(`/items/${id}`, data);
+    return res.data;
+  },
+
+  delete: async (id) => {
+    const res = await api.delete(`/items/${id}`);
+    return res.data;
+  },
 };
 
-// Invoice API
+// ==============================
+// 🔹 INVOICE API
+// ==============================
 export const invoiceAPI = {
-  getAll: () => api.get('/invoices'),
-  getById: (id) => api.get(`/invoices/${id}`),
-  getByInvoiceId: (invoiceId) => api.get(`/invoices/invoice-id/${invoiceId}`),
-  getByCustomerId: (customerId) => api.get(`/invoices/customer/${customerId}`),
-  create: (data) => api.post('/invoices', data),
-  updateStatus: (id, status) => api.put(`/invoices/${id}/status`, { status }),
-  delete: (id) => api.delete(`/invoices/${id}`),
+  getAll: async () => {
+    const res = await api.get('/invoices');
+    return res.data;
+  },
+
+  getById: async (id) => {
+    const res = await api.get(`/invoices/${id}`);
+    return res.data;
+  },
+
+  getByInvoiceId: async (invoiceId) => {
+    const res = await api.get(`/invoices/invoice-id/${invoiceId}`);
+    return res.data;
+  },
+
+  getByCustomerId: async (customerId) => {
+    const res = await api.get(`/invoices/customer/${customerId}`);
+    return res.data;
+  },
+
+  create: async (data) => {
+    const res = await api.post('/invoices', data);
+    return res.data;
+  },
+
+  updateStatus: async (id, status) => {
+    const res = await api.put(`/invoices/${id}/status`, { status });
+    return res.data;
+  },
+
+  delete: async (id) => {
+    const res = await api.delete(`/invoices/${id}`);
+    return res.data;
+  },
 };
+
+// ==============================
+// 🔹 GLOBAL ERROR HANDLER
+// ==============================
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    console.error("API Error:", error?.response || error.message);
+    return Promise.reject(error);
+  }
+);
 
 export default api;
