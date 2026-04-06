@@ -144,6 +144,25 @@ app.post('/api/invoices', (req, res) => {
 });
 
 // Start server
-app.listen(port, () => {
-  console.log(`Server running on port ${port}`);
+const server = app.listen(port, () => {
+  console.log(`LogiEdge Billing Dashboard API running on port ${port}`);
+  console.log(`Health check: http://localhost:${port}/health`);
 });
+
+// Handle graceful shutdown
+process.on('SIGTERM', () => {
+  console.log('SIGTERM received, shutting down gracefully');
+  server.close(() => {
+    console.log('Process terminated');
+  });
+});
+
+process.on('SIGINT', () => {
+  console.log('SIGINT received, shutting down gracefully');
+  server.close(() => {
+    console.log('Process terminated');
+  });
+});
+
+// Export app for testing and module usage
+module.exports = app;
