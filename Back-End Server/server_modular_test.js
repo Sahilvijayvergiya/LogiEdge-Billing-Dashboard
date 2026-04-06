@@ -54,8 +54,25 @@ let nextInvoiceId = 1;
 
 // Basic routes
 app.get('/', (req, res) => {
-  res.json({ message: 'Billing API is running' });
+ res.json({
+    message: 'LogiEdge Billing Dashboard API',
+    status: 'running',
+    version: '1.0.0',
+    endpoints: {
+      customers: '/api/customers',
+      items: '/api/items',
+      invoices: '/api/invoices'
+    },
+    timestamp: new Date().toISOString()
+  });
 });
+
+app.get('/health', (req, res) => {
+  res.json({
+    status: 'OK',
+    timestamp: new Date().toISOString(),
+    uptime: process.uptime()
+  });});
 
 app.get('/api/customers', (req, res) => {
   res.json(customers);
