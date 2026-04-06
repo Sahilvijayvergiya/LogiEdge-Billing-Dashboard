@@ -1,25 +1,11 @@
-const express = require("express");
-const cors = require("cors");
+const app = require('./server_modular_test.js');
 
-const app = express();
-
-// ✅ Middleware
-app.use(cors({ origin: "*" }));
-app.use(express.json());
-
-// ✅ Routes
-app.use('/api/customers', require('./routes/customerRoutes'));
-app.use('/api/items', require('./routes/itemRoutes'));
-app.use('/api/invoices', require('./routes/invoiceRoutes'));
-
-// ✅ Test route
-app.get('/', (req, res) => {
-  res.send("API Running...");
-});
-
-// ✅ Port
-const PORT = process.env.PORT || 5000;
-
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
+// Handle server startup
+if (app && app.listen) {
+  const port = process.env.PORT || 5000;
+  app.listen(port, () => {
+    console.log(`Server running on port ${port}`);
+  });
+} else {
+  console.error('Server module not found or not properly exported');
+}
