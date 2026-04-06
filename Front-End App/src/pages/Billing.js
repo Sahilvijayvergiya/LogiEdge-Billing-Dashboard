@@ -114,117 +114,155 @@ function Billing() {
   const { subtotal, gstAmount, totalAmount } = calculateTotals();
 
   return (
-    <div>
-      <div className="card">
-        <h2>Create Invoice</h2>
-        
-        {error && <div className="alert alert-error">{error}</div>}
+    <div className="billing-page">
+      <div className="card billing-header">
+        <h2>🧾 Create Invoice</h2>
+        <p>Fill in the details below to generate a new invoice</p>
+      </div>
 
-        <form onSubmit={handleSubmit}>
+      {error && <div className="alert alert-error">{error}</div>}
+
+      <form onSubmit={handleSubmit} className="billing-form">
+        <div className="card customer-section">
+          <h3>👤 Customer Information</h3>
           <div className="form-group">
-            <label>Select Customer</label>
-            <select 
-              value={selectedCustomer} 
+            <label>Select Customer *</label>
+            <select
+              value={selectedCustomer}
               onChange={(e) => handleCustomerChange(e.target.value)}
               required
+              className="customer-select"
             >
               <option value="">Choose a customer...</option>
               {customers.map(customer => (
                 <option key={customer.id} value={customer.id}>
-                  {customer.name} {customer.gst_registered ? '(GST)' : '(Non-GST)'}
+                  {customer.name} {customer.gst_registered ? '📋 (GST)' : '📝 (Non-GST)'}
                 </option>
               ))}
             </select>
           </div>
+        </div>
 
-          <div className="card">
-            <h3>Items</h3>
-            
-            {invoiceItems.map((item, index) => (
-              <div key={index} className="row">
-                <div className="col-4">
-                  <select 
-                    value={item.item_id}
-                    onChange={(e) => handleItemChange(index, 'item_id', e.target.value)}
-                    required
-                  >
-                    <option value="">Select item...</option>
-                    {items.map(item => (
-                      <option key={item.id} value={item.id}>
-                        {item.name} - ₹{item.price}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-                <div className="col-3">
-                  <input 
-                    type="number" 
-                    placeholder="Quantity"
-                    value={item.quantity}
-                    onChange={(e) => handleItemChange(index, 'quantity', parseInt(e.target.value))}
-                    min="1"
-                    required
-                  />
-                </div>
-                <div className="col-3">
-                  <input 
-                    type="number" 
-                    placeholder="Price"
-                    value={item.unit_price}
-                    readOnly
-                  />
-                </div>
-                <div className="col-2">
-                  <button 
-                    type="button" 
-                    className="btn btn-danger"
-                    onClick={() => handleRemoveItem(index)}
-                  >
-                    Remove
-                  </button>
-                </div>
-              </div>
-            ))}
-            
+        <div className="card items-section">
+          <div className="section-header">
+            <h3>📦 Invoice Items</h3>
             <button 
               type="button" 
-              className="btn btn-secondary mt-2"
+              className="btn btn-success add-item-btn"
               onClick={handleAddItem}
             >
-              Add Item
+              ➕ Add Item
             </button>
           </div>
 
-          <div className="form-group">
-            <label>Notes</label>
-            <textarea 
-              value={notes}
-              onChange={(e) => setNotes(e.target.value)}
-              rows="3"
-              placeholder="Additional notes for the invoice..."
-            />
-          </div>
-
-          {invoiceItems.length > 0 && (
-            <div className="card" style={{ backgroundColor: '#f8f9fa' }}>
-              <h3>Invoice Summary</h3>
-              <div className="invoice-summary">
-                <div><strong>Subtotal:</strong> ₹{subtotal.toFixed(2)}</div>
-                {selectedCustomer && !selectedCustomer.gst_registered && (
-                  <div><strong>GST (18%):</strong> ₹{gstAmount.toFixed(2)}</div>
-                )}
-                <div className="total"><strong>Total Amount:</strong> ₹{totalAmount.toFixed(2)}</div>
-              </div>
+          {invoiceItems.length === 0 ? (
+            <div className="empty-items">
+              <div className="empty-icon">📦</div>
+              <h4>No items added yet</h4>
+              <p>Click "Add Item" to start building your invoice</p>
+            </div>
+          ) : (
+            <div className="items-list">
+              {invoiceItems.map((item, index) => (
+                <div key={index} className="item-row">
+                  <div className="item-select-col">
+                    <select
+                      value={item.item_id}
+                      onChange={(e) => handleItemChange(index, 'item_id', e.target.value)}
+                      required
+                      className="item-select"
+                    >
+                      <option value="">Select item...</option>
+                      {items.map(item => (
+                        <option key={item.id} value={item.id}>
+                          {item.name} - ₹{item.price}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                  <div className="quantity-col">
+                    <input
+                      type="number"
+                      placeholder="Qty"
+                      value={item.quantity}
+                      onChange={(e) => handleItemChange(index, 'quantity', parseInt(e.target.value))}
+                      min="1"
+                      required
+                      className="quantity-input"
+                    />
+                  </div>
+                  <div className="price-col">
+                    <input
+                      type="number"
+                      placeholder="Price"
+                      value={item.unit_price}
+                      readOnly
+                      className="price-input"
+                    />
+                  </div>
+                  <div className="total-col">
+                    <div className="item-total">
+                      ₹{(item.quantity * item.unit_price).toFixed(2)}
+                    </div>
+                  </div>
+                  <div className="action-col">
+                    <button
+                      type="button"
+                      className="btn btn-danger remove-btn"
+                      onClick={() => handleRemoveItem(index)}
+                    >
+                      🗑️
+                    </button>
+                  </div>
+                </div>
+              ))}
             </div>
           )}
+        </div>
 
-          <div className="form-group">
-            <button type="submit" className="btn btn-primary" disabled={!selectedCustomer || invoiceItems.length === 0}>
-              Create Invoice
-            </button>
+        <div className="card notes-section">
+          <h3>📝 Additional Notes</h3>
+          <textarea 
+            value={notes}
+            onChange={(e) => setNotes(e.target.value)}
+            rows="3"
+            placeholder="Add any additional notes for the invoice..."
+            className="notes-textarea"
+          />
+        </div>
+
+        {invoiceItems.length > 0 && (
+          <div className="card summary-section">
+            <h3>💰 Invoice Summary</h3>
+            <div className="summary-grid">
+              <div className="summary-row">
+                <span className="label">Subtotal:</span>
+                <span className="value">₹{subtotal.toFixed(2)}</span>
+              </div>
+              {selectedCustomer && !customers.find(c => c.id === parseInt(selectedCustomer))?.gst_registered && (
+                <div className="summary-row gst-row">
+                  <span className="label">GST (18%):</span>
+                  <span className="value gst-value">₹{gstAmount.toFixed(2)}</span>
+                </div>
+              )}
+              <div className="summary-row total-row">
+                <span className="label">Total Amount:</span>
+                <span className="value total-value">₹{totalAmount.toFixed(2)}</span>
+              </div>
+            </div>
           </div>
-        </form>
-      </div>
+        )}
+
+        <div className="form-actions">
+          <button 
+            type="submit" 
+            className="btn btn-primary create-invoice-btn"
+            disabled={!selectedCustomer || invoiceItems.length === 0}
+          >
+            🧾 Create Invoice
+          </button>
+        </div>
+      </form>
     </div>
   );
 };
