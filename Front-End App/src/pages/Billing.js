@@ -126,7 +126,18 @@ function Billing() {
   }
 
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="billing-page">
+        <div className="card billing-header">
+          <h2>🧾 Create Invoice</h2>
+        </div>
+        <div className="loading-container">
+          <div className="loading-spinner">⏳</div>
+          <h3>Loading billing data...</h3>
+          <p>Please wait while we fetch customers and items.</p>
+        </div>
+      </div>
+    );
   }
 
   const { subtotal, gstAmount, totalAmount } = calculateTotals();
@@ -206,7 +217,7 @@ function Billing() {
                       type="number"
                       placeholder="Qty"
                       value={item.quantity}
-                      onChange={(e) => handleItemChange(index, 'quantity', parseInt(e.target.value))}
+                      onChange={(e) => handleItemChange(index, 'quantity', parseInt(e.target.value) || 1)}
                       min="1"
                       required
                       className="quantity-input"
