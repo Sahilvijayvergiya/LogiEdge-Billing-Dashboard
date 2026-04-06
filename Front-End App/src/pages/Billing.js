@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { customerAPI, itemAPI, invoiceAPI, testAPI } from '../services/api';
+import { customerAPI, itemAPI, invoiceAPI } from '../services/api';
+import ApiTest from '../components/ApiTest';
 
 function Billing() {
   const [customers, setCustomers] = useState([]);
@@ -20,44 +21,34 @@ function Billing() {
     setLoading(true);
     setError('');
     
-    // First test API connection
-    testAPI().then(testResult => {
-      if (!testResult.success) {
-        setError(`API Connection Failed: ${testResult.error}`);
-        setLoading(false);
-        return;
+    Promise.all([
+      customerAPI.getAll(),
+      itemAPI.getAll()
+    ])
+    .then(([customersRes, itemsRes]) => {
+      console.log('Customers loaded:', customersRes.data);
+      console.log('Items loaded:', itemsRes.data);
+      setCustomers(customersRes.data || []);
+      setItems(itemsRes.data || []);
+    })
+    .catch(err => {
+      console.error('Load data error:', err);
+      let errorMessage = 'Failed to load data';
+      
+      if (err.message) {
+        errorMessage = err.message;
+      } else if (err.response?.status === 0) {
+        errorMessage = 'Network error. Please check your internet connection.';
+      } else if (err.response?.status === 404) {
+        errorMessage = 'API endpoint not found. Please check backend deployment.';
+      } else if (err.code === 'ECONNABORTED') {
+        errorMessage = 'Request timeout. Please try again.';
       }
       
-      // If API test passes, load data
-      Promise.all([
-        customerAPI.getAll(),
-        itemAPI.getAll()
-      ])
-      .then(([customersRes, itemsRes]) => {
-        console.log('Customers loaded:', customersRes.data);
-        console.log('Items loaded:', itemsRes.data);
-        setCustomers(customersRes.data || []);
-        setItems(itemsRes.data || []);
-      })
-      .catch(err => {
-        console.error('Load data error:', err);
-        let errorMessage = 'Failed to load data';
-        
-        if (err.message) {
-          errorMessage = err.message;
-        } else if (err.response?.status === 0) {
-          errorMessage = 'Network error. Please check your internet connection.';
-        } else if (err.response?.status === 404) {
-          errorMessage = 'API endpoint not found. Please check backend deployment.';
-        } else if (err.code === 'ECONNABORTED') {
-          errorMessage = 'Request timeout. Please try again.';
-        }
-        
-        setError(errorMessage);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
+      setError(errorMessage);
+    })
+    .finally(() => {
+      setLoading(false);
     });
   }
 
@@ -146,6 +137,9 @@ function Billing() {
         <h2>🧾 Create Invoice</h2>
         <p>Fill in the details below to generate a new invoice</p>
       </div>
+
+      {/* API Test Component for Debugging */}
+      <ApiTest />
 
       {error && <div className="alert alert-error">{error}</div>}
 
