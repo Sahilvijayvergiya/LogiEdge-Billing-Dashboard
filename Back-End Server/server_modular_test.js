@@ -6,13 +6,28 @@ const app = express();
 const port = process.env.PORT || 5000;
 
 // Basic middleware setup
-app.use(cors());
+app.use(cors({
+  origin: ['http://localhost:3000', 'https://logiedge-billing-dashboard-1.onrender.com', 'https://logiedge-billing-dashboard-zqwe.onrender.com'],
+  credentials: true
+}));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // Simple request logger
 app.use((req, res, next) => {
-  console.log(`${req.method} ${req.path}`);
+  console.log(`${req.method} ${req.path} - Host: ${req.get('host')}`);
+  
+  // Set proper headers
+  res.header('Access-Control-Allow-Origin', req.get('origin') || '*');
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+  res.header('Access-Control-Allow-Credentials', 'true');
+  
+  // Handle preflight requests
+  if (req.method === 'OPTIONS') {
+    res.sendStatus(200);
+    return;
+  }
   next();
 });
 
