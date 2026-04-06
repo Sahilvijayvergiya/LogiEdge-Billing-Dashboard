@@ -1,27 +1,48 @@
-require("dotenv").config();
-
-const express = require("express");
-const cors = require("cors");
+// Direct server entry - no dependencies on other files
+const express = require('express');
+const cors = require('cors');
 
 const app = express();
+const port = process.env.PORT || 5000;
 
-// Middleware
-app.use(cors({ origin: "*" }));
+// CORS setup
+app.use(cors({
+  origin: true,
+  credentials: true
+}));
+
 app.use(express.json());
 
-// Routes
-app.use("/api/customers", require("./routes/customerRoutes"));
-app.use("/api/items", require("./routes/itemRoutes"));
-app.use("/api/invoices", require("./routes/invoiceRoutes"));
-
-// Health check
-app.get("/", (req, res) => {
-  res.send("API Running 🚀");
+// Basic routes
+app.get('/', (req, res) => {
+  res.json({
+    message: 'LogiEdge API is running',
+    status: 'OK',
+    timestamp: new Date().toISOString()
+  });
 });
 
-// PORT
-const PORT = process.env.PORT || 5000;
-
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+app.get('/api/customers', (req, res) => {
+  res.json([
+    { id: 1, name: 'ABC Corp', email: 'abc@corp.com', gst_registered: true },
+    { id: 2, name: 'XYZ Ltd', email: 'xyz@ltd.com', gst_registered: false }
+  ]);
 });
+
+app.get('/api/items', (req, res) => {
+  res.json([
+    { id: 1, name: 'Laptop', price: 85000 },
+    { id: 2, name: 'LED Monitor', price: 13450 }
+  ]);
+});
+
+app.get('/health', (req, res) => {
+  res.json({ status: 'OK' });
+});
+
+// Start server
+app.listen(port, () => {
+  console.log(`Direct server running on port ${port}`);
+});
+
+module.exports = app;
