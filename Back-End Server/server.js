@@ -17,6 +17,8 @@ app.use(express.json());
 
 // Additional CORS headers for all requests
 app.use((req, res, next) => {
+  console.log(`${req.method} ${req.path} - Origin: ${req.get('origin')}`);
+  
   res.header('Access-Control-Allow-Origin', '*');
   res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
   res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Origin, X-Requested-With, Accept');
@@ -24,6 +26,7 @@ app.use((req, res, next) => {
   
   // Handle preflight requests
   if (req.method === 'OPTIONS') {
+    console.log('Handling OPTIONS request');
     res.sendStatus(200);
     return;
   }
@@ -51,6 +54,7 @@ app.get('/', (req, res) => {
 });
 
 app.get('/api/customers', (req, res) => {
+  console.log('GET /api/customers - Sending customer data');
   res.json([
     { id: 1, name: 'ABC Corp', email: 'abc@corp.com', gst_registered: true },
     { id: 2, name: 'XYZ Ltd', email: 'xyz@ltd.com', gst_registered: false }
@@ -58,6 +62,7 @@ app.get('/api/customers', (req, res) => {
 });
 
 app.get('/api/items', (req, res) => {
+  console.log('GET /api/items - Sending item data');
   res.json([
     { id: 1, name: 'Laptop', price: 85000 },
     { id: 2, name: 'LED Monitor', price: 13450 }
