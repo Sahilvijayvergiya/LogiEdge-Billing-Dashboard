@@ -7,8 +7,10 @@ const port = process.env.PORT || 5000;
 
 // Basic middleware setup
 app.use(cors({
-  origin: ['http://localhost:3000', 'https://logiedge-billing-dashboard-1.onrender.com', 'https://logiedge-billing-dashboard-zqwe.onrender.com'],
-  credentials: true
+ origin: true, // Allow all origins for development
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'Origin', 'X-Requested-With']
 }));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
