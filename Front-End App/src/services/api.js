@@ -9,8 +9,43 @@ const api = axios.create({
   headers: {
     'Content-Type': 'application/json',
   },
+timeout: 10000, // 10 second timeout
 });
 
+// Add request interceptor for debugging
+api.interceptors.request.use(
+  (config) => {
+    console.log(`API Request: ${config.method?.toUpperCase()} ${config.url}`);
+    return config;
+  },
+  (error) => {
+    console.error('Request error:', error);
+    return Promise.reject(error);
+  }
+);
+
+// Add response interceptor for error handling
+api.interceptors.response.use(
+  (response) => {
+    console.log(`API Response: ${response.status} ${response.config.url}`);
+    return response;
+  },
+  (error) => {
+    console.error('Response error:', error);
+    
+    if (error.code === 'ECONNABORTED') {
+      error.message = 'Request timeout. Please try again.';
+    } else if (error.response?.status === 0) {
+      error.message = 'Network error. Please check your connection.';
+    } else if (error.response?.status === 404) {
+      error.message = 'Resource not found.';
+    } else if (error.response?.status >= 500) {
+      error.message = 'Server error. Please try again later.';
+    }
+    
+    return Promise.reject(error);
+  }
+);
 // ==============================
 // 🔹 CUSTOMER API
 // ==============================
