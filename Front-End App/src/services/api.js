@@ -59,6 +59,11 @@ api.interceptors.response.use(
   }
 );
 
+// Test API for debugging
+export const testAPI = {
+  test: () => api.get('/test')
+};
+
 // Customer API
 export const customerAPI = {
   getAll: () => api.get('/customers'),
