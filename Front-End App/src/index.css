@@ -1,3 +1,252 @@
+/* Billing Page Styles */
+.billing-page {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.billing-header {
+  text-align: center;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 30px;
+  margin-bottom: 30px;
+}
+
+.billing-header h2 {
+  margin: 0 0 10px 0;
+  font-size: 2rem;
+}
+
+.billing-header p {
+  margin: 0;
+  opacity: 0.9;
+}
+
+.billing-form {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+
+.customer-section,
+.items-section,
+.notes-section,
+.summary-section {
+  padding: 25px;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.section-header h3 {
+  margin: 0;
+}
+
+.add-item-btn {
+  background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: transform 0.2s ease;
+}
+
+.add-item-btn:hover {
+  transform: translateY(-2px);
+}
+
+.empty-items {
+  text-align: center;
+  padding: 60px 20px;
+  color: #666;
+}
+
+.empty-icon {
+  font-size: 4rem;
+  margin-bottom: 20px;
+  opacity: 0.5;
+}
+
+.empty-items h4 {
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.items-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.item-row {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr auto;
+  gap: 15px;
+  align-items: center;
+  padding: 15px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  border: 1px solid #e9ecef;
+}
+
+.item-select,
+.quantity-input,
+.price-input {
+  width: 100%;
+  padding: 10px;
+  border: 2px solid #ddd;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+.item-select:focus,
+.quantity-input:focus {
+  outline: none;
+  border-color: #667eea;
+}
+
+.price-input {
+  background: #e9ecef;
+  color: #666;
+}
+
+.item-total {
+  font-weight: bold;
+  color: #28a745;
+  text-align: right;
+}
+
+.remove-btn {
+  background: #dc3545;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+}
+
+.remove-btn:hover {
+  background: #c82333;
+}
+
+.notes-textarea {
+  width: 100%;
+  padding: 12px;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  font-size: 14px;
+  resize: vertical;
+}
+
+.notes-textarea:focus {
+  outline: none;
+  border-color: #667eea;
+}
+
+.summary-section {
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  border: 2px solid #dee2e6;
+}
+
+.summary-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+}
+
+.summary-row.total-row {
+  border-top: 2px solid #dee2e6;
+  padding-top: 15px;
+  margin-top: 10px;
+}
+
+.summary-row .label {
+  font-weight: 600;
+  color: #495057;
+}
+
+.summary-row .value {
+  font-weight: bold;
+  color: #212529;
+}
+
+.gst-row .value {
+  color: #fd7e14;
+}
+
+.total-row .value {
+  color: #28a745;
+  font-size: 1.2rem;
+}
+
+.form-actions {
+  text-align: center;
+  margin-top: 30px;
+}
+
+.create-invoice-btn {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  padding: 15px 40px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 600;
+  transition: transform 0.2s ease;
+}
+
+.create-invoice-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+.create-invoice-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .item-row {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+  
+  .item-row > div {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .item-row > div label {
+    font-weight: 600;
+    margin-right: 10px;
+  }
+  
+  .section-header {
+    flex-direction: column;
+    gap: 15px;
+    align-items: flex-start;
+  }
+}
+
 /* Dashboard Header */
 .dashboard-header {
   display: flex;
