@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { customerAPI, itemAPI, invoiceAPI } from '../services/api';
-import ApiTest from '../components/ApiTest';
 
 function Billing() {
   const [customers, setCustomers] = useState([]);
@@ -148,9 +147,6 @@ function Billing() {
         <h2>🧾 Create Invoice</h2>
         <p>Fill in the details below to generate a new invoice</p>
       </div>
-
-      {/* API Test Component for Debugging */}
-      <ApiTest />
 
       {error && <div className="alert alert-error">{error}</div>}
 
