@@ -5,21 +5,21 @@ const cors = require("cors");
 
 const app = express();
 
-// ✅ Middleware
+// Middleware
 app.use(cors({ origin: "*" }));
 app.use(express.json());
 
-// ✅ Routes
+// Routes
 app.use("/api/customers", require("./routes/customerRoutes"));
 app.use("/api/items", require("./routes/itemRoutes"));
 app.use("/api/invoices", require("./routes/invoiceRoutes"));
 
-// ✅ Health check
+// Health check
 app.get("/", (req, res) => {
   res.send("API Running 🚀");
 });
 
-// ✅ PORT (IMPORTANT)
+// PORT
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
