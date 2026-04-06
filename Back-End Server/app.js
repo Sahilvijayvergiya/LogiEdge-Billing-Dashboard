@@ -68,8 +68,13 @@ app.get('/api/customers', (req, res) => {
 app.get('/api/items', (req, res) => {
   console.log('GET /api/items - Sending item data');
   res.json([
-    { id: 1, name: 'Laptop', price: 85000 },
-    { id: 2, name: 'LED Monitor', price: 13450 }
+    { id: 1, name: 'Laptop', price: 85000, description: 'High-performance laptop' },
+    { id: 2, name: 'LED Monitor', price: 13450, description: '24-inch LED monitor' },
+    { id: 3, name: 'Pen Drive', price: 980, description: '64GB USB pen drive' },
+    { id: 4, name: 'Mobile', price: 18900, description: 'Smartphone with latest features' },
+    { id: 5, name: 'Headphone', price: 2350, description: 'Wireless headphones' },
+    { id: 6, name: 'Bagpack', price: 1200, description: 'Laptop backpack' },
+    { id: 7, name: 'Powerbank', price: 1400, description: 'Portable power bank 20000mAh' }
   ]);
 });
 
