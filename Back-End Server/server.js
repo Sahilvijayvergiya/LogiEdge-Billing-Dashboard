@@ -64,6 +64,21 @@ app.get('/api/items', (req, res) => {
   ]);
 });
 
+// Invoice endpoints
+app.get('/api/invoices', (req, res) => {
+  res.json([]);
+});
+
+app.post('/api/invoices', (req, res) => {
+  const invoice = {
+    id: Date.now(),
+    invoice_id: `INVC${String(Date.now()).slice(-6)}`,
+    ...req.body,
+    created_at: new Date().toISOString()
+  };
+  res.json(invoice);
+});
+
 app.get('/health', (req, res) => {
   res.json({ status: 'OK' });
 });
