@@ -5,6 +5,8 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
+    "start:test": "node test-server.js",
+    "start:backup": "node -e \"const express = require('express'); const cors = require('cors'); const app = express(); app.use(cors({origin: true})); app.use(express.json()); app.get('/', (req, res) => res.json({status: 'OK', message: 'API running'})); app.get('/api/customers', (req, res) => res.json([{id: 1, name: 'Test Customer', gst_registered: true}])); app.get('/api/items', (req, res) => res.json([{id: 1, name: 'Test Item', price: 1000}])); app.listen(process.env.PORT || 5000, () => console.log('Server running'));\"",
     "dev": "node server_modular_test.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "prod": "node server.js"
